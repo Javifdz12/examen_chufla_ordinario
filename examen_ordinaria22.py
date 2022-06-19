@@ -7,21 +7,23 @@ class userAccount:
         else:
             self.alias="alias"
         if re.search(".*@.*\..*", email)==None or email=="":
-            self.email=input("correo electronico debe tener formato xxx@xxx.xx: ")
+            raise Exception("correo electronico debe tener formato xxx@xxx.xx: ")
         else:
             self.email=email
         self.tweets=tweets
 
-        self.seguidores=seguidores
+        if type(seguidores)!=list:
+            raise Exception ("debe ser una lista")
+        else:
+            self.seguidores=seguidores
 
         self.timeline=timeline
     def get_seguidores(self):
-        return self.seguidores
-    def set_seguidores(self,user):
-        self.seguidores=self.seguidores.append(user)
-#user es un objeto useaccount
+        for i in range(len(self.seguidores)):
+            return self.seguidores[i].alias
+
     def follow(self,user):
-        user.seguidores=user.set_seguidores(self)
+        user.seguidores.append(self)
 
     def tweet(self,post):
         f=open(self.tweets,"w")
@@ -29,11 +31,15 @@ class userAccount:
         f.close()
 
 
-manolo=pepe=userAccount("manolo","manolo@j.j","tweets4.txt","tweets5.txt",[])
-pepe=userAccount("pepe","pepe@j.j","tweets.txt","tweets1.txt",[manolo])
-javi=userAccount("javi","javi@j.j","tweets2.txt","tweets3.txt",[manolo])
+manolo=userAccount("manolo","manolo@j.j","tweets4.txt","tweets5.txt",[])
+pepe=userAccount("pepe","pepe@j.j","tweets.txt","tweets1.txt",[])
+javi=userAccount("javi","javi@j.j","tweets2.txt","tweets3.txt",[])
 pepe.follow(javi)
+manolo.follow(pepe)
 javi.follow(pepe)
+manolo.follow(javi)
+
+
 javi.tweet("hola que tal soy nuevo")
 print(javi.seguidores)
 print(pepe.seguidores)
@@ -44,7 +50,7 @@ class tweet:
             fecha_apertura=datetime.datetime.strptime(fecha_apertura,"%d%m%Y")
             self.time=time
         else:
-            print("fecha no existe")
+            raise Exception("fecha no existe")
         self.fichero=fichero
         if len(tweet)<=140:
             self.tweet=tweet
@@ -69,7 +75,7 @@ class directmessage:
         if len(tweet)<=140:
             self.tweet=tweet
         else:
-            raise Exception("demasiado largo")
+            raise Exception("tweet demasiado largo")
         self.user1=user1
         self.user2=user2
 
