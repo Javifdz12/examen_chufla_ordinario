@@ -20,7 +20,7 @@ class userAccount:
         self.timeline=timeline
     def get_seguidores(self):
         for i in range(len(self.seguidores)):
-            return self.seguidores[i].alias
+            print(self.seguidores[i].alias)
 
     def follow(self,user):
         user.seguidores.append(self)
